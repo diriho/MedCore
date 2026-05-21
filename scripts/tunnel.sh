@@ -22,7 +22,7 @@ print_qr() {
 
 LOG="$(mktemp)"
 echo "Starting Cloudflare tunnel → http://localhost:${PORT}"
-cloudflared tunnel --url "http://localhost:${PORT}" 2>&1 | tee "$LOG" &
+cloudflared tunnel --url "http://localhost:${PORT}" > "$LOG" 2>&1 &
 PID=$!
 trap 'kill $PID 2>/dev/null || true; rm -f "$LOG"' EXIT INT TERM
 

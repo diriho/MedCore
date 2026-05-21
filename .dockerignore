@@ -1,0 +1,11 @@
+node_modules
+server/node_modules
+server/data/*.db
+server/data/audio
+dist
+.git
+.DS_Store
+*.log
+.env
+.env.local
+YAIS_AI_Case_Study_vfin.pptx.pdf

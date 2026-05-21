@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test & build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Install web deps
+        run: npm ci
+
+      - name: Install server deps
+        run: npm --prefix server ci
+
+      - name: Type-check server
+        run: npm --prefix server exec -- tsc --noEmit
+
+      - name: Web tests
+        run: npm test
+
+      - name: Server tests
+        run: npm --prefix server test
+
+      - name: Web production build
+        run: npm run build

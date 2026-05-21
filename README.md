@@ -2,6 +2,25 @@
 
 MedCore is a centralised digital health records platform designed for African healthcare providers. This repo contains a **Vite + React web app** (`src/`) and a **Node + Express + SQLite API** (`server/`) that implements PRD Features 1–6 end-to-end.
 
+## 🏆 Recognition
+
+**Winner — [Yale Africa Innovation Symposium IV](https://www.yaleafricainnovation.org/) (April 16–18, 2026)**, built within the **Technology & AI Innovation Lab** track under the symposium's "The Pulse of Progress" theme.
+
+<table>
+  <tr>
+    <td width="50%"><img src="assets/yais-iv-team-presenting.jpeg" alt="MedCore team presenting at YAIS IV judging — April 18, 2026"></td>
+    <td width="50%"><img src="assets/yais-iv-tech-ai-lab.jpeg" alt="Technology & AI Innovation Lab participants at YAIS IV"></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Final presentation, Yale, April 18, 2026</em></td>
+    <td align="center"><em>Technology &amp; AI Innovation Lab participants, YAIS IV</em></td>
+  </tr>
+</table>
+
+**Demo video** ([assets/medcore-demo.mp4](assets/medcore-demo.mp4)) — the same walkthrough shown to YAIS IV judges:
+
+<video src="assets/medcore-demo.mp4" controls width="640"></video>
+
 ## Architecture
 
 ```
@@ -58,6 +77,17 @@ npm run test:all            # both
 ## Demo on your phone
 
 See [`docs/DEMO.md`](docs/DEMO.md) for the full 7-feature phone walkthrough (PWA install, voice, video, push reminders, SMS, Health ID QR, offline/low-bandwidth).
+
+## Docs
+
+| File | Contents |
+|------|----------|
+| [`docs/DEMO.md`](docs/DEMO.md) | Phone walkthrough for all 8 features |
+| [`docs/ENV_SETUP.md`](docs/ENV_SETUP.md) | Guide to filling out `server/.env` |
+| [`docs/PRD.md`](docs/PRD.md) | Full product requirements document |
+| [`docs/go-to-market.md`](docs/go-to-market.md) | GTM strategy and pilot roadmap |
+| [`docs/GUIDELINES.md`](docs/GUIDELINES.md) | Development conventions |
+| [`docs/ATTRIBUTIONS.md`](docs/ATTRIBUTIONS.md) | Third-party licenses and credits |
 
 Media APIs (camera, microphone, push) require a **secure context**. There are two supported options:
 
