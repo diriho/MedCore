@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="darkBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F2A22"/>
+      <stop offset="1" stop-color="#1A3D32"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" fill="url(#darkBg)"/>
+
+  <g opacity="0.10" stroke="#DAB776" stroke-width="1.2" fill="none">
+    <circle cx="240" cy="210" r="180"/>
+    <circle cx="240" cy="210" r="250"/>
+    <circle cx="240" cy="210" r="320"/>
+  </g>
+
+  <g transform="translate(90, 60)">
+    <rect width="300" height="300" rx="56" fill="#F7F1E6"/>
+    <path d="M60 150h44l18-36 36 72 18-36h64"
+          stroke="#214838"
+          stroke-width="16"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+  </g>
+
+  <g transform="translate(450, 0)" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+    <text x="0" y="200" font-weight="800" font-size="104" fill="#F7F1E6" letter-spacing="-3">MedCore</text>
+    <text x="0" y="252" font-weight="500" font-size="28" fill="#DAB776">Centralised digital health records</text>
+    <text x="0" y="292" font-weight="500" font-size="28" fill="#DAB776">for African healthcare</text>
+    <g transform="translate(0, 332)">
+      <rect width="120" height="32" rx="16" fill="#DAB776"/>
+      <text x="60" y="22" text-anchor="middle" font-weight="700" font-size="14" fill="#214838" letter-spacing="0.5">FHIR · PWA</text>
+    </g>
+    <g transform="translate(132, 332)">
+      <rect width="160" height="32" rx="16" fill="none" stroke="#DAB776" stroke-width="1.5"/>
+      <text x="80" y="22" text-anchor="middle" font-weight="600" font-size="14" fill="#DAB776" letter-spacing="0.5">OFFLINE-FIRST</text>
+    </g>
+  </g>
+</svg>
