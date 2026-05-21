@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/Builder106/MedCore/actions/workflows/ci.yml/badge.svg)](https://github.com/Builder106/MedCore/actions/workflows/ci.yml)
 [![Deploy](https://github.com/Builder106/MedCore/actions/workflows/deploy.yml/badge.svg)](https://github.com/Builder106/MedCore/actions/workflows/deploy.yml)
-[![Demo](https://img.shields.io/badge/demo-live-success.svg)](http://136.117.181.143:3001)
+[![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://136-117-181-143.nip.io)
 [![Node](https://img.shields.io/badge/node-22%2B-339933.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
