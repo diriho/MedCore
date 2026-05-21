@@ -10,7 +10,10 @@
       "tunnel": "bash scripts/tunnel.sh",
       "build": "vite build",
       "test": "vitest run",
-      "test:all": "npm test && npm --prefix server test"
+      "test:all": "npm test && npm --prefix server test",
+      "e2e": "bddgen test --config e2e/playwright.config.ts && playwright test --config=e2e/playwright.config.ts",
+      "e2e:demo": "DEMO=1 bddgen test --config e2e/playwright.demo.config.ts && DEMO=1 playwright test --config=e2e/playwright.demo.config.ts",
+      "e2e:demo:gif": "node scripts/mp4-to-gif.mjs"
    },
    "dependencies": {
       "@emotion/react": "11.14.0",
@@ -74,6 +77,7 @@
       "vaul": "1.1.2"
    },
    "devDependencies": {
+      "@playwright/test": "^1.60.0",
       "@tailwindcss/vite": "4.1.12",
       "@testing-library/jest-dom": "^6.9.1",
       "@testing-library/react": "^16.3.2",
@@ -81,6 +85,7 @@
       "@vitejs/plugin-react": "4.7.0",
       "concurrently": "^9.1.0",
       "jsdom": "^29.0.2",
+      "playwright-bdd": "^8.5.1",
       "tailwindcss": "4.1.12",
       "vite": "6.4.2",
       "vite-plugin-pwa": "^0.21.1",
