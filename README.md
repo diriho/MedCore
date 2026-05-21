@@ -114,17 +114,27 @@ The same walkthrough shown to YAIS IV judges. Covers: login → patient chart �
 </details>
 
 <details>
-<summary><strong>Per-feature Gherkin demos</strong> — generated via the E2E demo suite</summary>
+<summary><strong>Core workflow</strong> — doctor signs in, opens a patient chart, AI panel auto-loads (≈25s)</summary>
 
-Per-feature recordings are produced by the `e2e/demo/` Gherkin suite. Generate them locally:
+![Doctor signs in and opens a patient chart](assets/demo-01-core.gif)
+
+Recorded against the live deploy at <https://136-117-181-143.nip.io> via the [`e2e/demo/features/01-core.feature`](e2e/demo/features/01-core.feature) Gherkin scenario.
+
+</details>
+
+<details>
+<summary><strong>How to regenerate / add more</strong></summary>
+
+The Gherkin suite at [`e2e/demo/features/`](e2e/demo/features/) drives Playwright with slowmo + a custom video reporter that converts webm → mp4 → gif. Add a `0N-<name>.feature` and:
 
 ```bash
-npx playwright install chromium
-DEMO=1 npm run e2e:demo            # produces test-results/*.mp4
-npm run e2e:demo:gif               # converts each to a GIF for embedding
+npx playwright install chromium    # one-time
+E2E_BASE_URL=https://136-117-181-143.nip.io DEMO=1 npm run e2e:demo  # records mp4
+npm run e2e:demo:gif               # mp4 -> gif (10 fps, 960px wide)
+cp e2e/demo-videos/<slug>.gif assets/<name>.gif
 ```
 
-Output paths and the cluster groupings used here are documented in [`docs/E2E.md`](docs/E2E.md).
+The full mechanics — cursor injection, dwell helpers, the 0-byte first-test workaround — are documented in [`docs/E2E.md`](docs/E2E.md).
 
 </details>
 

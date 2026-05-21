@@ -5,7 +5,7 @@ import { dwellForDemo } from './dwell.js';
 export const { Given, When, Then, Step, Before, After } = createBdd();
 
 Before(async ({ page }) => {
-  patchLocatorFillForDemo();
+  patchLocatorFillForDemo(page);
   await installDemoChrome(page);
 });
 

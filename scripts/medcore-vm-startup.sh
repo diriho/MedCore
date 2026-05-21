@@ -21,6 +21,15 @@ DISK_BYID=/dev/disk/by-id/google-medcore-data
 MOUNT=/mnt/disks/data
 DBDIR="${MOUNT}/medcore-db"
 
+echo "[startup] opening iptables for 80/443 (COS default INPUT policy is DROP)"
+# COS resets iptables to DROP on every reboot. Caddy uses host networking and
+# binds 80/443 directly, but COS's default INPUT chain drops them unless we
+# explicitly ACCEPT. GCP-native firewall rules don't help here — those gate
+# traffic before it reaches the VM, but the VM's local iptables is a separate
+# layer that's also wiped at boot.
+iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+
 echo "[startup] mounting data disk"
 mkdir -p "$MOUNT"
 if ! mountpoint -q "$MOUNT"; then

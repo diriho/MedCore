@@ -63,20 +63,24 @@ let typingPatched = false;
 
 /**
  * Patch Locator.fill to animate typing character-by-character in demo mode.
- * Patches the global prototype once per worker.
+ * Patches the global prototype once per worker. Grabs the prototype off a
+ * live locator instance because `@playwright/test` only exports Locator as a
+ * type, not a runtime value.
  */
-export function patchLocatorFillForDemo() {
+export function patchLocatorFillForDemo(page: Page) {
   if (process.env.DEMO !== '1' || typingPatched) return;
   typingPatched = true;
 
   const delay = Number(process.env.DEMO_TYPE_DELAY ?? 70);
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { Locator } = require('@playwright/test');
-  const originalFill = Locator.prototype.fill;
-  Locator.prototype.fill = async function (value: string, options?: Record<string, unknown>) {
+  const sampleLocator = page.locator('html');
+  const proto = Object.getPrototypeOf(sampleLocator) as {
+    fill: (value: string, options?: Record<string, unknown>) => Promise<void>;
+  };
+  const originalFill = proto.fill;
+  proto.fill = async function (this: typeof sampleLocator, value: string, options?: Record<string, unknown>) {
     if (typeof value === 'string' && value.length > 0 && value.length <= 200) {
       await this.click(options);
-      await this.fill('', options);
+      await originalFill.call(this, '', options);
       await this.pressSequentially(value, { delay, ...options });
       return;
     }
