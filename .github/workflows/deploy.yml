@@ -115,3 +115,51 @@ jobs:
             echo ""
             echo "Pull: \`docker pull ${REGISTRY}/${{ steps.img.outputs.name }}:latest\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-vm:
+    name: Deploy to GCP VM
+    needs: manifest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Reset VM to pick up new image
+        # The VM has a startup-script that runs up.sh, which `docker pull`s the
+        # latest image before docker run. Reset is enough — no SSH needed.
+        run: |
+          gcloud compute instances reset medcore-api \
+            --project=medcore-app-89455 \
+            --zone=us-west1-a
+
+      - name: Wait for /api/health
+        run: |
+          for i in $(seq 1 24); do
+            if curl -fsk --max-time 5 https://136-117-181-143.nip.io/api/health 2>/dev/null | grep -q '"ok":true'; then
+              echo "Healthy after $i tries"
+              curl -sk --max-time 5 https://136-117-181-143.nip.io/api/health
+              exit 0
+            fi
+            echo "[try $i] not yet"
+            sleep 10
+          done
+          echo "::error::Health check failed after 4 minutes"
+          exit 1
+
+      - name: Deploy summary
+        if: always()
+        run: |
+          {
+            echo "### Deploy to VM"
+            echo ""
+            echo "- VM: \`medcore-api\` (us-west1-a)"
+            echo "- Live: <https://136-117-181-143.nip.io>"
+          } >> "$GITHUB_STEP_SUMMARY"
