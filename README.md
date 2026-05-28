@@ -1,12 +1,12 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.png">
-  <img alt="MedCore — Centralised digital health records for African healthcare" src="assets/banner-dark.png">
+  <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg">
+  <img alt="MedCore — Centralised digital health records for African healthcare" src="assets/banner-dark.svg">
 </picture>
 
 [![CI](https://github.com/Builder106/MedCore/actions/workflows/ci.yml/badge.svg)](https://github.com/Builder106/MedCore/actions/workflows/ci.yml)
 [![Deploy](https://github.com/Builder106/MedCore/actions/workflows/deploy.yml/badge.svg)](https://github.com/Builder106/MedCore/actions/workflows/deploy.yml)
-[![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://136-117-181-143.nip.io)
+[![Demo](https://img.shields.io/badge/demo-live-success.svg)](https://medcore-health.vercel.app)
 [![Node](https://img.shields.io/badge/node-22%2B-339933.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)

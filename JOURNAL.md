@@ -8,6 +8,24 @@
 
 ---
 
+## 2026-05-28 — Post-pivot baseline cleanup `#milestone`
+
+After the Vercel rewrite landed (PR #10), did a baseline audit against the standard-repo checklist and closed the gaps that opened up by the platform pivot: README's `Demo` badge + GitHub repo homepage URL updated from the nip.io backend to `medcore-health.vercel.app`; banner `<picture>` srcsets swapped from `.png` to `.svg` (sources existed all along, README just referenced the rasterized fallbacks); added `apple-touch-icon.png` at 180×180 generated from `favicon.svg` via rsvg-convert with `#214838` background (iOS Safari ignores SVG favicons for home-screen installs, falls back to a low-res page screenshot); replaced deprecated `apple-mobile-web-app-capable` with the modern `mobile-web-app-capable` meta (also kept the legacy tag for iOS < 16 compatibility); installed `@vercel/analytics` + `@vercel/speed-insights` and mounted both inside `AppProvider` so the dashboards at `vercel.com/sankofa-forge/medcore/{analytics,speed-insights}` start collecting on the next deploy.
+
+---
+
+## 2026-05-28 — Dependabot triage + LTS-only Node policy `#decision`
+
+Eight Dependabot PRs cleared in one sitting. Trivial five (GH Actions bumps) squash-merged as a batch. Web-deps group (#8, 49 updates) and server-deps group (#9, 14 updates) merged after a usage-grep showed the scary majors were either unused (@mui — declared but zero src/ imports; date-fns — same) or used through the most stable subset of their API (recharts `BarChart`/`Bar`/`XAxis`, multer `memoryStorage().single()`, no Express 5 route-param-regex, no Zod 4 breaking-API usage). Closed PR #3 (node 20→26-alpine) — Node 20 EOL'd on 2026-04-30 so the bump is needed, but 26 isn't LTS until October 2026 and this is a healthcare project. Bumped Dockerfile to `node:24-alpine` manually (still local-uncommitted, sitting in the working tree alongside other WIP) and added `ignore: [node, semver-major]` to `.github/dependabot.yml` so Dependabot stops proposing non-LTS jumps. Policy from here: bump node manually each October when the new LTS lands.
+
+---
+
+## 2026-05-28 — Vercel as a prettier front door for the GCP VM `#decision`
+
+The live URL was the nip.io wildcard against the GCP VM's IP (`136-117-181-143.nip.io`) — accurate but ugly. Considered three paths: (1) custom domain A-record straight to the VM, (2) free real subdomain via is-a.dev / js.org, (3) deploy the Vite build to Vercel and rewrite `/api/*` back to the nip.io backend. Picked (3) for the `*.vercel.app` recognizability, accepting the ~50–150 ms Vercel-edge → us-west1 backend hop per API call. Updated [`vercel.json`](vercel.json) to drop the dead serverless `api/[...all].ts` function path (SQLite-on-disk + 30s timeout made Vercel a non-starter for the actual API months ago) and proxy `/api/*` through to the VM. Added `.vercelignore` so Vercel stops scanning `api/` + `server/`. The Express function file and `@vercel/node` dep are now dead code but left in place for now — git history is enough if we ever want them back.
+
+---
+
 ## 2026-05-23 — Started this journal `#milestone`
 
 Picked up that future content (post-mortem posts, demo scripts, eventual O-1 evidence) was hitting a wall on "what broke" and "what someone said at the booth" because nothing got written down during the YAIS sprint. Backfilled the entries below from git + README; marked the gaps with `[FILL]` where only personal memory can answer.
