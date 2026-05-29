@@ -1,12 +1,39 @@
+# ── Dependencies ─────────────────────────────────────────────────────────────
 node_modules
+server/node_modules
+
+# ── Build output ──────────────────────────────────────────────────────────────
 dist
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
 .env
-.DS_Store
+server/.env
+
+# ── Database ──────────────────────────────────────────────────────────────────
 server/data/*.db
 server/data/*.db-journal
 server/data/*.db-shm
 server/data/*.db-wal
+
+# ── Generated audio files ─────────────────────────────────────────────────────
 server/data/audio/*
 !server/data/audio/.gitkeep
-server/node_modules
-server/.env
+
+# ── OS metadata ───────────────────────────────────────────────────────────────
+.DS_Store
+
+# ── Playwright + E2E ──────────────────────────────────────────────────────────
+e2e/.features-gen
+e2e/test-results
+e2e/demo-videos/*.mp4
+e2e/demo-videos/*.webm
+e2e/demo-videos/*.gif
+playwright-report
+test-results
+
+# ── Documentation ───────────────────────────────────────────────────────────
+docs/ENV_SETUP.md
+docs/go-to-market.md
+docs/*.pdf
+.vercel
+.env*.local
