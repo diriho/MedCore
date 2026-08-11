@@ -49,7 +49,7 @@ The Vite dev server proxies `/api/*` to the Express server on port 3001 and bind
 ### Sign-in (demo)
 
 | Role | User ID | Default PIN |
-|------|---------|-------------|
+| ------ | --------- | ------------- |
 | Doctor | `DOC-001` | `4242` |
 | Patient | `PAT-001` | `1212` |
 | Admin | `ADM-001` | `3434` |
@@ -103,15 +103,6 @@ sequenceDiagram
 All external integrations fall back to mocks when API keys are absent, so the canonical journey above works offline.
 
 ## Demo recordings
-
-<details>
-<summary><strong>YAIS IV walkthrough</strong> — full feature tour from the Yale presentation (≈3 min)</summary>
-
-[![Demo video](https://img.shields.io/badge/▶_play-medcore--demo.mp4-214838.svg?style=for-the-badge)](assets/medcore-demo.mp4)
-
-The same walkthrough shown to YAIS IV judges. Covers: login → patient chart → AI summary → drug interaction override → voice consult transcription → video consult → SMS doctor commands → medication reminders → Health ID QR → offline PWA mode.
-
-</details>
 
 <details>
 <summary><strong>Core workflow</strong> — doctor signs in, opens a patient chart, AI panel auto-loads (≈25s)</summary>
@@ -170,7 +161,7 @@ CI runs all of the above on every PR — see [`.github/workflows/ci.yml`](.githu
 ## Docs
 
 | File | Contents |
-|------|----------|
+| ------ | ---------- |
 | [`docs/PRD.md`](docs/PRD.md) | Full product requirements document |
 | [`docs/DEMO.md`](docs/DEMO.md) | Phone walkthrough for all 8 features |
 | [`docs/ENV_SETUP.md`](docs/ENV_SETUP.md) | Guide to filling out `server/.env` |

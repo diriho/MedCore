@@ -1,4 +1,6 @@
-**Add your own guidelines here**
+**# Guidelines
+
+Add your own guidelines here**
 <!--
 
 System Guidelines
@@ -35,7 +37,6 @@ For example:
 
 You can also create sub sections and add more specific details
 For example:
-
 
 ## Button
 The Button component is a fundamental interactive element in our design system, designed to trigger actions or navigate
