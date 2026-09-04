@@ -4,7 +4,33 @@
 
 **Tags:** `#decision` `#pivot` `#incident` `#quote` `#feedback` `#milestone`
 
+## 2026-08-29: Let Vercel detect the MedCore build settings #decision
+
+Removed the explicit Vite framework, build, output, and install settings from `vercel.json` so Vercel can use the project defaults. Kept the `main` and `staging` Git deployment gates and the API rewrite.
+
+## 2026-08-29: Git deployment branches restricted #decision
+
+Git-triggered Vercel deployments now run only for `main` and `staging`. The project keeps `main` as its Production Branch, so `staging` is the only Preview branch. Replaced the old `ignoreCommand`, which created canceled deployment records for blocked branches, with `git.deploymentEnabled`.
+
 > ℹ️ **Backfill notice.** Entries below dated 2026-04-18 and 2026-05-21 were reconstructed from git history and the published README in May 2026, AFTER the YAIS sprint. They cover the *what*and*when*that's verifiable from commits and docs — the*who said what*and*what surprised you* parts are mostly missing because the journal didn't exist during the sprint. Going forward, treat these as the structure, not the precedent: new entries should land in the moment with the human detail intact.
+
+---
+
+## 2026-08-27: Fixed the isolated server lint install #incident
+
+The server CI job installs from `server/package-lock.json`, so declaring `@eslint/js` only at the repository root could not satisfy its flat ESLint config. Added the package to the server manifest and lockfile. The complete frontend and server lint, format, typecheck, test, and build matrix now passes on ampere-dev.
+
+## 2026-08-29: Removed unused remote database path `#decision`
+
+The live backend uses its persistent local SQLite database, so the unused remote database branch and environment settings are gone. The server now has one database path.
+
+## 2026-08-27 — Pinned frontend tooling to supported ESLint and TypeScript versions `#incident`
+
+The frontend lint job failed before reading source because TypeScript 7 is not supported by the installed `typescript-eslint`, and ESLint 10 is not supported by `eslint-plugin-react`. Pinned root tooling to TypeScript 5.9.3 and ESLint 9.39.5, then synchronized `package-lock.json`; frontend and server lint pass on ampere-dev.
+
+## 2026-08-27 — Resolved CI workflow action tags and @eslint/js dependency `#incident`
+
+Audited GitHub Actions workflow runs and resolved the frontend lint failure on CI. Downgraded GitHub Action runner references (`actions/checkout`, `actions/setup-node`, `actions/upload-artifact`) in `.github/workflows/ci.yml` and `.github/workflows/deploy.yml` from invalid `@v7` tags to `@v4`. Explicitly declared `@eslint/js` in root `devDependencies` and synced root package metadata so ESLint flat config loads properly in CI runner environments.
 
 ---
 
