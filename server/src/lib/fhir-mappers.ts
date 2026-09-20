@@ -1,26 +1,5 @@
 // Maps MedCore DB rows to FHIR R4 resource objects (read-only export).
 
-export interface FhirResource {
-  resourceType: string;
-  id: string;
-  [key: string]: unknown;
-}
-
-export interface FhirBundle {
-  resourceType: 'Bundle';
-  id: string;
-  type: 'collection';
-  timestamp: string;
-  total: number;
-  entry: { fullUrl: string; resource: FhirResource }[];
-}
-
-export interface FhirExtension {
-  url: string;
-  valueString?: string;
-  [key: string]: unknown;
-}
-
 export interface FhirIdentifier {
   system: string;
   value: string;
@@ -44,6 +23,40 @@ export interface FhirAllergyIntolerance {
   patient: { reference: string };
   code: { text: string };
   clinicalStatus: { coding: Array<{ code: string }> };
+}
+
+export type FhirFieldValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | FhirFieldValue[]
+  | { [key: string]: FhirFieldValue }
+  | FhirIdentifier[]
+  | FhirName[]
+  | FhirTelecom[]
+  | FhirAllergyIntolerance[];
+
+export interface FhirResource {
+  resourceType: string;
+  id: string;
+  [key: string]: FhirFieldValue;
+}
+
+export interface FhirBundle {
+  resourceType: 'Bundle';
+  id: string;
+  type: 'collection';
+  timestamp: string;
+  total: number;
+  entry: { fullUrl: string; resource: FhirResource }[];
+}
+
+export interface FhirExtension {
+  url: string;
+  valueString?: string;
+  [key: string]: FhirFieldValue;
 }
 
 export interface FhirPatient extends FhirResource {

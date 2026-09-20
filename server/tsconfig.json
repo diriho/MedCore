@@ -5,12 +5,12 @@
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "types": ["node"],
+    "skipLibCheck": true,
     "outDir": "dist"
   },
   "include": ["src/**/*"]

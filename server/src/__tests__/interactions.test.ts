@@ -1,9 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
   checkInteractionViaOpenFDA,
   lookupFallback,
   resolveInteraction,
 } from '../lib/interactions.js';
+import { mockFetchJson } from './helpers.js';
 
 describe('interactions lib', () => {
   it('looks up fallback interactions both forward and reversed', () => {
@@ -25,83 +26,55 @@ describe('interactions lib', () => {
 
   it('checks interactions via OpenFDA with different severity levels', async () => {
     // Critical match
-    const mockFetchCritical = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [
-          { drug_interactions: ['Severe contraindicated reaction leading to fatal risk.'] },
-        ],
-      }),
+    const mockFetchCritical = mockFetchJson({
+      results: [{ drug_interactions: ['Severe contraindicated reaction leading to fatal risk.'] }],
     });
 
-    const resCrit = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchCritical as any);
+    const resCrit = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchCritical);
     expect(resCrit?.level).toBe('critical');
     expect(resCrit?.source).toBe('openfda');
 
     // Warning match
-    const mockFetchWarning = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [{ drug_interactions: ['Monitor patient closely for increased risk.'] }],
-      }),
+    const mockFetchWarning = mockFetchJson({
+      results: [{ drug_interactions: ['Monitor patient closely for increased risk.'] }],
     });
 
-    const resWarn = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchWarning as any);
+    const resWarn = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchWarning);
     expect(resWarn?.level).toBe('warning');
 
     // Info match (default when no critical/warning keywords match)
-    const mockFetchInfo = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [
-          { drug_interactions: ['Concurrent administration studied in pharmacokinetic trials.'] },
-        ],
-      }),
+    const mockFetchInfo = mockFetchJson({
+      results: [
+        { drug_interactions: ['Concurrent administration studied in pharmacokinetic trials.'] },
+      ],
     });
 
-    const resInfo = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchInfo as any);
+    const resInfo = await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchInfo);
     expect(resInfo?.level).toBe('info');
 
     // Missing or empty drug_interactions in results
-    const mockFetchUndefinedInteractions = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [{}],
-      }),
-    });
+    const mockFetchUndefinedInteractions = mockFetchJson({ results: [{}] });
     expect(
-      await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchUndefinedInteractions as any)
+      await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchUndefinedInteractions)
     ).toBeNull();
 
     // Empty results array
-    const mockFetchEmptyResults = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        results: [],
-      }),
-    });
-    expect(
-      await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchEmptyResults as any)
-    ).toBeNull();
+    const mockFetchEmptyResults = mockFetchJson({ results: [] });
+    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchEmptyResults)).toBeNull();
 
     // Missing results property
-    const mockFetchNoResults = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({}),
-    });
-    expect(
-      await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchNoResults as any)
-    ).toBeNull();
+    const mockFetchNoResults = mockFetchJson({});
+    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchNoResults)).toBeNull();
 
     // HTTP error response
-    const mockFetchError = vi.fn().mockResolvedValue({
-      ok: false,
-    });
-    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchError as any)).toBeNull();
+    const mockFetchError = mockFetchJson(null, { status: 500 });
+    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchError)).toBeNull();
 
     // Exception thrown by fetch
-    const mockFetchThrows = vi.fn().mockRejectedValue(new Error('Network offline'));
-    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchThrows as any)).toBeNull();
+    const mockFetchThrows: typeof fetch = async () => {
+      throw new Error('Network offline');
+    };
+    expect(await checkInteractionViaOpenFDA('DrugA', 'DrugB', mockFetchThrows)).toBeNull();
   });
 
   it('resolves interactions with priority on fallback before remote API', async () => {
@@ -112,12 +85,9 @@ describe('interactions lib', () => {
     // Non-fallback drug with FDA mock returns remote interaction
     const origFetch = globalThis.fetch;
     try {
-      globalThis.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({
-          results: [{ drug_interactions: ['Avoid coadministration due to toxicity.'] }],
-        }),
-      }) as any;
+      globalThis.fetch = mockFetchJson({
+        results: [{ drug_interactions: ['Avoid coadministration due to toxicity.'] }],
+      });
 
       const remoteRes = await resolveInteraction('DrugAlpha', 'DrugBeta');
       expect(remoteRes.level).toBe('warning');
